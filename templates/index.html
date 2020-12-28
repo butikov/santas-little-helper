@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Santa's little helper's service</title>
+</head>
+<body>
+<form action="{{ url_for('index') }}" method=post>
+    <dl>
+        <dt>Enter your year description: <br>
+        <dd><textarea name=text rows=5 cols=40>{{ text }}</textarea>
+        <dd><input type=submit value="Reveal your destiny">
+    </dl>
+</form>
+<br>Santa's verdict:<br>
+{{ prediction_message }}
+</body>
+</html>

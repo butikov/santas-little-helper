@@ -2,13 +2,14 @@ import re
 
 import pandas as pd
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.linear_model import SGDClassifier
+from sklearn.feature_extraction.text import TfidfVectorizer, CountVectorizer
+from sklearn.linear_model import SGDClassifier, LogisticRegression
 from sklearn.metrics import f1_score
 from sklearn.model_selection import train_test_split
 from sklearn.pipeline import Pipeline
 import pickle
 
+from sklearn.svm import LinearSVC
 
 text_clf = Pipeline([
     ('vect', TfidfVectorizer(stop_words='english')),
@@ -35,11 +36,11 @@ class Model:
 
     @classmethod
     def from_dataframe(cls, df: pd.DataFrame):
-        transformer = TfidfVectorizer(stop_words='english', ngram_range=(2, 3), max_df=0.9,)
+        transformer = CountVectorizer(stop_words='english', ngram_range=(2, 3), max_df=0.9, binary=True,)
         data = transformer.fit_transform(df['comment'])
-        train_X, test_X, train_y, test_y = train_test_split(data, df['is_good'], test_size=0.2, random_state=42)
-        model = RandomForestClassifier(max_depth=10)
-        # model = SGDClassifier(loss='hinge', penalty='l2', alpha=1e-3, random_state=42, max_iter=5, n_jobs=-1, tol=None)
+        train_X, test_X, train_y, test_y = train_test_split(data, df['is_good'], test_size=0.4, random_state=42)
+        #model = RandomForestClassifier(max_depth=10)
+        model = LinearSVC(penalty='l2', tol=1e-3)
         model.fit(train_X, train_y)
         print(f1_score(test_y, model.predict(test_X)))
         return cls(model, transformer)

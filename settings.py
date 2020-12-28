@@ -1,2 +1,2 @@
-MODEL_FILE = 'sgd.model'
-VECTORIZER_FILE = 'tfidf.vectorizer'
+MODEL_FILE = 'svc.model'
+VECTORIZER_FILE = 'count.vectorizer'
